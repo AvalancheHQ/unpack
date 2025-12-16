@@ -1,11 +1,11 @@
 #![feature(arbitrary_self_types_pointers)]
 pub mod asset;
-pub mod file_source;
 pub mod asset_content;
-pub mod module;
-pub mod reference;
-pub mod ident;
-pub mod source;
 pub mod chunk;
+pub mod file_source;
+pub mod ident;
+pub mod module;
 pub mod module_graph;
 pub mod output;
+pub mod reference;
+pub mod source;

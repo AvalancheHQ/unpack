@@ -1,15 +1,21 @@
 pub mod trace_di_graph;
 use crate::{
-    chunk::{availability_info::{ModuleBatch, RoaringBitmapWrapper}, chunk_group::ChunkGroupEntry, chunk_group_info::{compute_chunk_group_info, ChunkGroupInfo}},
+    chunk::{
+        availability_info::{ModuleBatch, RoaringBitmapWrapper},
+        chunk_group::ChunkGroupEntry,
+        chunk_group_info::{ChunkGroupInfo, compute_chunk_group_info},
+    },
     module::Module,
     module_graph::trace_di_graph::TracedDiGraph,
-    reference::{primary_chunkable_referenced_modules, ModuleReference},
+    reference::{ModuleReference, primary_chunkable_referenced_modules},
 };
 use anyhow::Result;
 use petgraph::{adj::NodeIndex, graph::DiGraph};
 use rustc_hash::{FxHashMap, FxHashSet};
 use serde::{Deserialize, Serialize};
-use turbo_tasks::{trace::TraceRawVcs, NonLocalValue, ReadRef, ResolvedVc, TaskInput, TryJoinIterExt as _, Vc};
+use turbo_tasks::{
+    NonLocalValue, ReadRef, ResolvedVc, TaskInput, TryJoinIterExt as _, Vc, trace::TraceRawVcs,
+};
 
 #[turbo_tasks::value(shared)]
 #[derive(Debug)]
@@ -17,7 +23,7 @@ pub struct ModuleGraph {
     pub graphs: Vec<ResolvedVc<SingleModuleGraph>>,
 }
 impl ModuleGraph {
-     pub async fn read_graphs(self: Vc<ModuleGraph>) -> Result<ModuleGraphRef> {
+    pub async fn read_graphs(self: Vc<ModuleGraph>) -> Result<ModuleGraphRef> {
         Ok(ModuleGraphRef {
             graphs: self.await?.graphs.iter().try_join().await?,
         })
@@ -45,7 +51,6 @@ impl ModuleGraph {
         compute_chunk_group_info(&self.read_graphs().await?).await
     }
 }
-
 
 #[turbo_tasks::value(cell = "new", eq = "manual", into = "new")]
 #[derive(Debug, Clone)]
@@ -154,7 +159,6 @@ pub enum ExportUsage {
     /// Only side effects are used.
     Evaluation,
 }
-
 
 #[turbo_tasks::value]
 pub struct ModuleBatchGroup {

@@ -1,21 +1,22 @@
 use std::{convert::TryFrom, ops::Deref};
 
+use anyhow::{Result, anyhow};
 use rustc_hash::FxHashMap;
 use serde::{Deserialize, Serialize};
 use turbo_rcstr::RcStr;
 use turbo_tasks::{FxIndexSet, ResolvedVc, Vc};
-use anyhow::{anyhow, Result};
 
 use crate::{
-    chunk::{availability_info::RoaringBitmapWrapper, chunk_group::{ChunkGroup, ChunkGroupEntry}},
+    chunk::{
+        availability_info::RoaringBitmapWrapper,
+        chunk_group::{ChunkGroup, ChunkGroupEntry},
+    },
     module::Module,
     module_graph::{ModuleGraphRef, SingleModuleGraphNode},
 };
 
 // compute chunk_group from module_graph
-pub async fn compute_chunk_group_info(
-    graphs: &ModuleGraphRef,
-) -> Result<Vc<ChunkGroupInfo>> {
+pub async fn compute_chunk_group_info(graphs: &ModuleGraphRef) -> Result<Vc<ChunkGroupInfo>> {
     let mut module_chunk_groups: FxHashMap<ResolvedVc<Box<dyn Module>>, RoaringBitmapWrapper> =
         FxHashMap::default();
     let mut chunk_groups: FxIndexSet<ChunkGroup> = FxIndexSet::default();
@@ -80,7 +81,7 @@ pub async fn compute_chunk_group_info(
     .cell())
 }
 
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 #[turbo_tasks::value]
 pub struct ChunkGroupInfo {
     pub module_chunk_groups: FxHashMap<ResolvedVc<Box<dyn Module>>, RoaringBitmapWrapper>,

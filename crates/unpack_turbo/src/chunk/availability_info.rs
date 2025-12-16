@@ -1,11 +1,19 @@
-use std::ops::{Deref, DerefMut};
-use std::hash::Hash;
 use roaring::RoaringBitmap;
 use serde::{Deserialize, Serialize};
+use std::hash::Hash;
+use std::ops::{Deref, DerefMut};
 
-use turbo_tasks::{debug::ValueDebugFormat, trace::TraceRawVcs, FxIndexSet, NonLocalValue, ResolvedVc, TaskInput, Vc};
+use turbo_tasks::{
+    FxIndexSet, NonLocalValue, ResolvedVc, TaskInput, Vc, debug::ValueDebugFormat,
+    trace::TraceRawVcs,
+};
 
-use crate::{asset::Asset, chunk::{chunk_context::ChunkingContext, chunk_item::ChunkItem}, module::Module, module_graph::ModuleGraph};
+use crate::{
+    asset::Asset,
+    chunk::{chunk_context::ChunkingContext, chunk_item::ChunkItem},
+    module::Module,
+    module_graph::ModuleGraph,
+};
 
 pub enum AvailabilityInfo {
     /// Availability of modules is not tracked
@@ -30,7 +38,6 @@ pub struct AvailableModules {
 #[turbo_tasks::value(transparent)]
 #[derive(Debug, Clone)]
 pub struct AvailableModulesSet(FxIndexSet<ChunkableModuleOrBatch>);
-
 
 #[derive(
     Debug,
@@ -62,7 +69,6 @@ pub trait ChunkableModule: Module + Asset {
     ) -> Vc<Box<dyn ChunkItem>>;
 }
 
-
 #[turbo_tasks::value]
 pub struct ModuleBatch {
     pub modules: Vec<ResolvedVc<Box<dyn ChunkableModule>>>,
@@ -74,7 +80,6 @@ pub struct ModuleBatch {
 )]
 #[repr(transparent)]
 pub struct RoaringBitmapWrapper(#[turbo_tasks(trace_ignore)] pub RoaringBitmap);
-
 
 impl TaskInput for RoaringBitmapWrapper {
     fn is_transient(&self) -> bool {

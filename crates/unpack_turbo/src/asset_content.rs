@@ -3,7 +3,6 @@ use turbo_tasks_fs::FileContent;
 
 use crate::asset::Asset;
 
-
 #[turbo_tasks::value]
 #[derive(Debug)]
 pub struct AssetContent {

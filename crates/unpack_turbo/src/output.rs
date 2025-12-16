@@ -1,7 +1,7 @@
+use crate::asset::Asset;
+use anyhow::Result;
 use turbo_tasks::{FxIndexSet, ResolvedVc, Vc};
 use turbo_tasks_fs::FileSystemPath;
-use anyhow::Result;
-use crate::asset::Asset;
 
 #[turbo_tasks::value_trait]
 pub trait OutputAsset: Asset {
@@ -11,9 +11,7 @@ pub trait OutputAsset: Asset {
     fn references(self: Vc<Self>) -> Vc<OutputAssets> {
         OutputAssets::empty()
     }
-
 }
-
 
 #[turbo_tasks::value(transparent)]
 pub struct OutputAssets(Vec<ResolvedVc<Box<dyn OutputAsset>>>);
