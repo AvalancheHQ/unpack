@@ -1,7 +1,16 @@
-use turbo_rcstr::{rcstr, RcStr};
-use turbo_tasks::{FxIndexSet, ResolvedVc, TaskInput, Vc};
+use crate::{
+    chunk::{
+        availability_info::{AvailabilityInfo, ChunkableModule, ChunkableModuleOrBatch},
+        chunk_context::{ChunkGroupResult, ChunkingContext},
+        chunk_group::ChunkGroup,
+    },
+    ident::AssetIdent,
+    module::Module,
+    module_graph::{ModuleBatchGroup, ModuleGraph},
+};
 use anyhow::Result;
-use crate::{chunk::{availability_info::{AvailabilityInfo, ChunkableModule, ChunkableModuleOrBatch}, chunk_context::{ChunkGroupResult, ChunkingContext}, chunk_group::ChunkGroup}, ident::AssetIdent, module::Module, module_graph::{ModuleBatchGroup, ModuleGraph}};
+use turbo_rcstr::{RcStr, rcstr};
+use turbo_tasks::{FxIndexSet, ResolvedVc, TaskInput, Vc};
 
 #[turbo_tasks::value]
 #[derive(Debug, Clone, Hash, TaskInput)]
@@ -30,17 +39,22 @@ impl BrowserChunkingContextBuilder {
 }
 
 #[turbo_tasks::value_impl]
-impl ChunkingContext for BrowserChunkingContext{
+impl ChunkingContext for BrowserChunkingContext {
     #[turbo_tasks::function]
-    fn name(&self) -> Vc<RcStr>{
-         if let Some(name) = &self.name {
+    fn name(&self) -> Vc<RcStr> {
+        if let Some(name) = &self.name {
             Vc::cell(name.clone())
         } else {
             Vc::cell(rcstr!("unknown"))
         }
     }
     #[turbo_tasks::function]
-    fn evaluated_chunk_group(self:ResolvedVc<Self> ,ident:Vc<AssetIdent> ,chunk_group:ChunkGroup,module_graph:Vc<ModuleGraph>) -> Vc<ChunkGroupResult> {
+    fn evaluated_chunk_group(
+        self: ResolvedVc<Self>,
+        ident: Vc<AssetIdent>,
+        chunk_group: ChunkGroup,
+        module_graph: Vc<ModuleGraph>,
+    ) -> Vc<ChunkGroupResult> {
         todo!()
     }
 }
@@ -53,8 +67,7 @@ pub async fn make_chunk_group(
     module_graph: Vc<ModuleGraph>,
     chunking_context: ResolvedVc<Box<dyn ChunkingContext>>,
     availability_info: AvailabilityInfo,
-){
-
+) {
 }
 pub async fn chunk_group_content(
     module_graph: Vc<ModuleGraph>,
@@ -66,8 +79,7 @@ pub async fn chunk_group_content(
     should_trace: bool,
     should_merge_modules: bool,
     batching_config: Vc<BatchingConfig>,
-) -> Result<ChunkGroupContent>{
-    
+) -> Result<ChunkGroupContent> {
     todo!()
 }
 

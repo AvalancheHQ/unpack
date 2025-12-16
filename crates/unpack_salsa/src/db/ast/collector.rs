@@ -1,10 +1,13 @@
 use std::{fs, path::PathBuf, sync::OnceLock};
 
 use rspack_resolver::{ResolveOptions, Resolver};
-use swc_core::{atoms::Atom, ecma::{
-    ast::{CallExpr, Callee, Decl, Expr, Ident, ImportDecl},
-    visit::{swc_ecma_ast, Visit, VisitWith},
-}};
+use swc_core::{
+    atoms::Atom,
+    ecma::{
+        ast::{CallExpr, Callee, Decl, Expr, Ident, ImportDecl},
+        visit::{Visit, VisitWith, swc_ecma_ast},
+    },
+};
 
 use crate::db::{Db, RootDatabase};
 
@@ -97,7 +100,7 @@ fn default_resolver() -> &'static Resolver {
 pub struct DependencyCollector<'db> {
     db: &'db dyn Db,
     pub importer: PathBuf,
-    pub module_references: Vec<ModuleReference<'db>>
+    pub module_references: Vec<ModuleReference<'db>>,
 }
 
 // utils
@@ -153,7 +156,7 @@ impl<'db> DependencyCollector<'db> {
         Self {
             module_references: vec![],
             importer,
-            db
+            db,
         }
     }
 }
@@ -163,13 +166,11 @@ impl<'db> Visit for DependencyCollector<'db> {
         let request = import.src.value.clone();
 
         // Add standard import dependency
-        self.module_references
-            .push(ModuleReference::new(
-                self.db,
-                self.importer.clone(),
-                request.clone(),
-            ));
-
+        self.module_references.push(ModuleReference::new(
+            self.db,
+            self.importer.clone(),
+            request.clone(),
+        ));
     }
 
     // Handle dynamic imports: import("./module")
@@ -181,12 +182,11 @@ impl<'db> Visit for DependencyCollector<'db> {
                 if let Expr::Lit(swc_ecma_ast::Lit::Str(str_lit)) = &*arg.expr {
                     let request = str_lit.value.clone();
                     // Add dynamic import dependency with different type
-                    self.module_references
-                        .push(ModuleReference::new(
-                            self.db,
-                            self.importer.clone(),
-                            request.clone(),
-                        ));
+                    self.module_references.push(ModuleReference::new(
+                        self.db,
+                        self.importer.clone(),
+                        request.clone(),
+                    ));
                 }
             }
         }

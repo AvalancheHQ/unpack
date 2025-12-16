@@ -1,15 +1,18 @@
+use crate::{
+    chunk::chunk_group::ChunkGroup,
+    ident::AssetIdent,
+    module_graph::ModuleGraph,
+    output::{OutputAssets, OutputAssetsWithReferenced},
+};
+use anyhow::Result;
 use turbo_rcstr::RcStr;
 use turbo_tasks::{ResolvedVc, Upcast, Vc};
-use anyhow::Result;
-use crate::{chunk::chunk_group::ChunkGroup, ident::AssetIdent, module_graph::ModuleGraph, output::{OutputAssets, OutputAssetsWithReferenced}};
-
-
 
 #[turbo_tasks::value_trait]
 pub trait ChunkingContext {
     #[turbo_tasks::function]
     fn name(self: Vc<Self>) -> Vc<RcStr>;
-     #[turbo_tasks::function]
+    #[turbo_tasks::function]
     fn evaluated_chunk_group(
         self: Vc<Self>,
         ident: Vc<AssetIdent>,
@@ -34,10 +37,7 @@ pub trait ChunkingContextExt {
     ) -> Vc<OutputAssetsWithReferenced>;
 }
 
-
-
-
-impl<T: ChunkingContext + Send + Upcast<Box<dyn ChunkingContext>>> ChunkingContextExt for T{
+impl<T: ChunkingContext + Send + Upcast<Box<dyn ChunkingContext>>> ChunkingContextExt for T {
     fn evaluated_chunk_group_assets(
         self: Vc<Self>,
         ident: Vc<AssetIdent>,
@@ -50,7 +50,7 @@ impl<T: ChunkingContext + Send + Upcast<Box<dyn ChunkingContext>>> ChunkingConte
             chunk_group,
             module_graph,
         )
-    }   
+    }
 }
 #[turbo_tasks::function]
 async fn evaluated_chunk_group_assets(

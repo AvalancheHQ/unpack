@@ -1,10 +1,10 @@
 use turbo_tasks::{TaskInput, Vc};
-use turbo_tasks_fs::{ FileSystemPath};
+use turbo_tasks_fs::FileSystemPath;
 
 #[turbo_tasks::value]
-#[derive(Clone,Debug,Hash,TaskInput)]
+#[derive(Clone, Debug, Hash, TaskInput)]
 pub struct AssetIdent {
-    pub path: FileSystemPath 
+    pub path: FileSystemPath,
 }
 
 #[turbo_tasks::value_impl]
@@ -14,8 +14,7 @@ impl AssetIdent {
         AssetIdent { path: path.clone() }.cell()
     }
     #[turbo_tasks::function]
-    pub fn path(&self) -> Vc<FileSystemPath>{
+    pub fn path(&self) -> Vc<FileSystemPath> {
         self.path.clone().cell()
     }
-
 }
