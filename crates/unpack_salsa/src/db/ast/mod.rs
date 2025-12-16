@@ -64,11 +64,7 @@ pub fn parse(db: &dyn Db, file: FileSource) -> miette::Result<ESMModule> {
 
     let mut collector = DependencyCollector::new(db, origin_path.clone());
     program.visit_with(&mut collector);
-    let references: Vec<_>= collector.module_references.into_iter().collect();
-    
-    Ok(ESMModule::new(
-        db,
-        origin_path,
-        references
-    ))
+    let references: Vec<_> = collector.module_references.into_iter().collect();
+
+    Ok(ESMModule::new(db, origin_path, references))
 }

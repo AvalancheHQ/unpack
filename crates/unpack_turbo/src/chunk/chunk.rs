@@ -1,6 +1,6 @@
-use turbo_tasks::{ResolvedVc, Vc};
- use crate::chunk::chunk_context::ChunkingContext;
+use crate::chunk::chunk_context::ChunkingContext;
 use crate::{chunk::chunk_item::ChunkItem, ident::AssetIdent, output::OutputAssets};
+use turbo_tasks::{ResolvedVc, Vc};
 
 #[turbo_tasks::value_trait]
 pub trait Chunk {
