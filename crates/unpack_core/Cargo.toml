@@ -35,3 +35,10 @@ parking_lot = { version = "*", features = ["send_guard"]}
 
 [lints]
 workspace = true
+
+[dev-dependencies]
+criterion = { version = "4.1.0", package = "codspeed-criterion-compat" }
+
+[[bench]]
+name = "example_benchmark"
+harness = false

@@ -1,11 +1,21 @@
-
-use turbo_tasks::{trace::TraceRawVcs, NonLocalValue, ResolvedVc, TaskInput, Vc};
 use crate::chunk::availability_info::AvailabilityInfo;
+use crate::chunk::chunk::Chunk;
 use crate::output::OutputAsset;
- use crate::chunk::chunk::Chunk;
 use crate::{chunk::chunk_context::ChunkingContext, module::Module, module_graph::ModuleGraph};
 use anyhow::Result;
-#[derive(Debug, Clone,TaskInput,TraceRawVcs,Hash,PartialEq,Eq,serde::Serialize,serde::Deserialize,NonLocalValue)]
+use turbo_tasks::{NonLocalValue, ResolvedVc, TaskInput, Vc, trace::TraceRawVcs};
+#[derive(
+    Debug,
+    Clone,
+    TaskInput,
+    TraceRawVcs,
+    Hash,
+    PartialEq,
+    Eq,
+    serde::Serialize,
+    serde::Deserialize,
+    NonLocalValue,
+)]
 pub enum ChunkGroupEntry {
     Entry(Vec<ResolvedVc<Box<dyn Module>>>),
     Async(ResolvedVc<Box<dyn Module>>),
@@ -19,7 +29,18 @@ impl ChunkGroupEntry {
     }
 }
 
-#[derive(Debug, Clone,TaskInput,TraceRawVcs,Hash,PartialEq,Eq,serde::Serialize,serde::Deserialize,NonLocalValue)]
+#[derive(
+    Debug,
+    Clone,
+    TaskInput,
+    TraceRawVcs,
+    Hash,
+    PartialEq,
+    Eq,
+    serde::Serialize,
+    serde::Deserialize,
+    NonLocalValue,
+)]
 pub enum ChunkGroup {
     Entry(Vec<ResolvedVc<Box<dyn Module>>>),
     Async(ResolvedVc<Box<dyn Module>>),

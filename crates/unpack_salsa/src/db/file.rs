@@ -5,5 +5,5 @@ use std::path::PathBuf;
 pub struct FileSource {
     /// absolute path of the file
     pub path: PathBuf,
-    pub content: String
+    pub content: String,
 }
