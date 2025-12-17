@@ -48,11 +48,12 @@ salsa-macros = { git = "https://github.com/salsa-rs/salsa.git", rev = "3713cd7eb
 petgraph= { version = "0.8.2"}
 rustc_hash = { version = "2.1.1"}
 roaring = { version = "0.10.10"}
+criterion = { package = "codspeed-criterion-compat", version = "4.1.0" }
 
 [profile.release]
 codegen-units = 1
 debug         = true
-# Performs “thin” LTO. This is similar to “fat”, but takes substantially less time to run while still achieving performance gains similar to “fat”.
+# Performs "thin" LTO. This is similar to "fat", but takes substantially less time to run while still achieving performance gains similar to "fat".
 lto       = "thin"
 opt-level = 3
 panic     = "abort"
